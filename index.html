@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>My first three.js app</title>
+		<style>
+			body { margin: 0%;}
+		</style>
+	</head>
+	<body>
+		<script src="https://threejs.org/build/three.js"></script>
+		
+		<script>
+			
+			const scene = new THREE.Scene();
+			var camera = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, 0.5, 1000 );
+
+			const renderer = new THREE.WebGLRenderer();
+			renderer.setSize( window.innerWidth, window.innerHeight );
+			document.body.appendChild( renderer.domElement );
+			document.body.addEventListener( 'keydown', onKeyDown, false );
+			
+			var light = new THREE.DirectionalLight( 0xffffff, 1 );
+			light.position.set( -20, 20, 20 );
+			scene.add(light);
+			
+
+			camera.position.z = 110 ;
+			camera.position.y = 20;
+			
+	  const texturaMadera = new THREE.TextureLoader().load("https://st4.depositphotos.com/13349494/25528/i/600/depositphotos_255283462-stock-photo-brown-textured-empty-surface-with.jpg");
+      const texturaAlfombra = new THREE.TextureLoader().load("https://st.depositphotos.com/1757583/3142/i/600/depositphotos_31424213-stock-photo-red-carpet.jpg");
+      const texturaPiso = new THREE.TextureLoader().load("https://images.unsplash.com/photo-1515895309288-a3815ab7cf81?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8dGV4dHVyYSUyMGRlbCUyMHBpc298ZW58MHx8MHx8&w=1000&q=80");
+      const texturaChimenea = new THREE.TextureLoader().load("https://st3.depositphotos.com/6997242/16568/v/450/depositphotos_165683070-stock-illustration-seamless-pattern-red-brick-wall.jpg");
+      const texturaSofa = new THREE.TextureLoader().load("https://st2.depositphotos.com/1004869/8659/i/600/depositphotos_86596498-stock-photo-light-upholstery-white-sofa-texture.jpg");
+	  const texturaLampara = new THREE.TextureLoader().load("https://st.depositphotos.com/1245125/2757/v/950/depositphotos_27576337-stock-illustration-vector-metal-texture.jpg");
+      
+    //Cargar piso
+	var loader = new THREE.ObjectLoader();
+			loader.load("Piso.json", function( group ) {
+			mesh = group.children[0];
+				mesh.material = new THREE.MeshPhongMaterial({color: 0xaaaaaa, specular: 0x333333, shininess: 15, map: texturaPiso})
+				mesh.position.x = 3;
+				scene.add( mesh );
+			});		
+
+    //Cargar alfombra
+      	var loader = new THREE.ObjectLoader();
+			loader.load("Alfombra.json", function( group ) {
+			mesh = group.children[0];
+				mesh.material = new THREE.MeshPhongMaterial({color: 0xaaaaaa, specular: 0x333333, shininess: 15, map: texturaAlfombra})
+				mesh.position.x = 50;
+				mesh.position.z = 50;
+				scene.add( mesh );
+			});		
+
+    //Cargar mesa
+      var loader = new THREE.ObjectLoader();
+			loader.load("Mesa.json", function( group ) {
+			mesh = group.children[0];
+				mesh.material = new THREE.MeshPhongMaterial({color: 0xaaaaaa, specular: 0x333333, shininess: 15, map: texturaMadera})
+				mesh.position.x = 2;
+				mesh.position.z = -15;	
+				mesh.scale.x = 4;
+				mesh.scale.y = 4;
+				mesh.scale.z = 4;
+				scene.add( mesh );
+			});	
+
+    //Cargar silla
+      var loader = new THREE.ObjectLoader();
+			loader.load("Silla.json", function( group ) {
+			mesh = group.children[0];
+				mesh.material = new THREE.MeshPhongMaterial({color: 0xaaaaaa, specular: 0x333333, shininess: 15, map: texturaMadera})		
+				mesh.position.x = 5;
+				mesh.position.z = -25;	
+				mesh.scale.x = 5;
+				mesh.scale.y = 5;
+				mesh.scale.z = 5;	
+				scene.add( mesh );
+			});	
+
+    //Cargar chimenea
+	var loader = new THREE.ObjectLoader();
+			loader.load("Chimenea.json", function( group ) {
+			mesh = group.children[0];
+				mesh.material = new THREE.MeshPhongMaterial({color: 0xaaaaaa, specular: 0x333333, shininess: 15, map: texturaChimenea})
+				mesh.position.x = 30;
+				mesh.position.z = -30;
+				mesh.scale.x = 10;
+				mesh.scale.y = 10;
+				mesh.scale.z = 10;
+				scene.add( mesh );
+			});
+
+	//Sofa
+		var loader = new THREE.ObjectLoader();
+			loader.load("Sofa.json", function( group ) {
+			mesh = group.children[0];
+				mesh.material = new THREE.MeshPhongMaterial({color: 0xaaaaaa, specular: 0x333333, shininess: 15, map: texturaSofa})
+				mesh.position.x = -10;
+				mesh.position.z = -30;
+				mesh.scale.x = 3.4;
+				mesh.scale.y = 3.4;
+				mesh.scale.z = 3.4;
+				scene.add( mesh );
+	});		
+	
+	//Cargar lámpara
+	var loader = new THREE.ObjectLoader();
+			loader.load("Lampara.json", function( group ) {
+			mesh = group.children[0];
+				mesh.material = new THREE.MeshPhongMaterial({color: 0xaaaaaa, specular: 0x333333, shininess: 15, map: texturaLampara})
+				mesh.position.x = -5;
+				mesh.position.y = 11;
+				mesh.position.z = -10;
+				mesh.scale.x = 15;
+				mesh.scale.y = 15;
+				mesh.scale.z = 15;
+				scene.add( mesh );
+			});	
+
+			function animate() {
+				requestAnimationFrame( animate );
+				
+				renderer.render( scene, camera );
+			}
+			
+			function onKeyDown(){
+			switch( event.keyCode ) {
+			   case 83: // up
+				camera.position.z += 1;
+			  	break;
+			   case 87: // down
+			  	camera.position.z -= 1;
+			  	break;
+			}
+
+			}
+      
+			animate();
+		</script>
+	</body>
+</html>
